@@ -65,7 +65,7 @@ train_df, test_df = split_train_test(df, TRAIN_RATIO)
 # plot_and_play(test_audio, 28, 5, 0)
 # plot_and_play(test_audio, 30, 5, 0)
 
-# TODO: Check if all the audio files have the same number of channels
+# Audio files don't have the same number of channels (mono & stereo)
 
 # TODO: Loop through all music file to get the max length spectrogram, and other specs
 # Spectrogram length for 45s audio with freq 44100 is often 15523
@@ -106,8 +106,9 @@ def train_datagen_song_level():
     label = tf.convert_to_tensor([valence_mean, arousal_mean], dtype=tf.float32)
     song_path = os.path.join(AUDIO_FOLDER, str(int(song_id)) + SOUND_EXTENSION)
     audio_file = tf.io.read_file(song_path)
-    waveforms, _ = tf.audio.decode_wav(contents=audio_file)
-    waveforms = preprocess_waveforms(waveforms, WAVE_ARRAY_LENGTH)
+    waveforms, _ = tf.audio.decode_wav(contents=audio_file, desired_samples=WAVE_ARRAY_LENGTH)
+    # TODO check if this preprocessing is identical
+    # waveforms = preprocess_waveforms(waveforms, WAVE_ARRAY_LENGTH)
     # print(waveforms.shape)
 
     # Work on building spectrogram

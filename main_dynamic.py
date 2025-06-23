@@ -145,9 +145,10 @@ def train_datagen_per_second():
     # Load song and waveform
     song_path = os.path.join(AUDIO_FOLDER, str(int(song_id)) + SOUND_EXTENSION)
     audio_file = tf.io.read_file(song_path)
-    waveforms, _ = tf.audio.decode_wav(contents=audio_file)
+    waveforms, _ = tf.audio.decode_wav(contents=audio_file, desired_samples=WAVE_ARRAY_LENGTH)
+    # TODO check if this preprocessing is identical
     # Pad to max 45 second. Shape (total_frequency, n_channels)
-    waveforms = preprocess_waveforms(waveforms, WAVE_ARRAY_LENGTH)
+    # waveforms = preprocess_waveforms(waveforms, WAVE_ARRAY_LENGTH)
 
     # Get the labels series
     valence_labels = train_valence_df.loc[pointer, train_valence_df.columns != "song_id"]
